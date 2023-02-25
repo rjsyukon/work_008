@@ -1,0 +1,32 @@
+head	1.1;
+access;
+symbols;
+locks
+	rjs:1.1; strict;
+comment	@// @;
+
+
+1.1
+date	2015.03.02.20.39.49;	author rjs;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@
+
+#include "postoFunceme.hpp"
+
+postoFunceme::postoFunceme()
+{
+}
+
+@

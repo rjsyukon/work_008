@@ -1,0 +1,27 @@
+head	1.1;
+access;
+symbols;
+locks
+	rjs:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2023.02.23.12.04.05;	author rjs;	state Exp;
+branches;
+next	;
+
+
+desc
+@.
+@
+
+
+1.1
+log
+@.
+@
+text
+@main 2011 4 2 -37.9 -4.7
+main 2011 4 2 -37.7746944443 -4.56847222221
+@

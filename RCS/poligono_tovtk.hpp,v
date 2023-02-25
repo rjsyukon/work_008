@@ -1,0 +1,127 @@
+head	1.4;
+access;
+symbols;
+locks
+	rjs:1.4; strict;
+comment	@// @;
+
+
+1.4
+date	2015.02.11.22.00.29;	author rjs;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2015.02.11.21.03.58;	author rjs;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2015.02.11.17.57.32;	author rjs;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2015.02.09.21.38.12;	author rjs;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@*** empty log message ***
+@
+text
+@
+#ifndef _POLIGONO_TOVTK_HPP_
+#define _POLIGONO_TOVTK_HPP_
+
+#include <string>
+
+#define DIR_FUNCEME /home/prof/Download/coordenadasDengueFunceme/Postos
+
+using namespace std;
+
+class poligono_toVtk
+{
+public:
+
+	poligono_toVtk();
+	void ceara_toVtk();
+	void municipios_toVtk();
+	void postos_toVtk();
+	void triangle_toVtk();
+
+private:
+
+protected:
+
+};
+
+class postoFunceme
+{
+public:
+	unsigned int Identidade;
+	string Cidade;
+	string nomePosto;
+	double xCoord; 
+	double yCoord;
+
+private:
+
+};
+
+class parCoord
+{
+public:
+	double xCoord;
+	double yCoord;
+private:
+};
+
+class verticesTriangulo
+{
+public:
+	unsigned int Vertice1;
+	unsigned int Vertice2;
+	unsigned int Vertice3;
+private:
+};
+
+#endif  // _POLIGONO_TOVTK_HPP_
+
+@
+
+
+1.3
+log
+@*** empty log message ***
+@
+text
+@d19 1
+d38 17
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@d6 3
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d5 3
+d15 1
+d20 13
+@

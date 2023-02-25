@@ -1,0 +1,67 @@
+Romildo José da Silva
+#ifndef _DADOS_DAFUNCEME_HPP_
+#define _DADOS_DAFUNCEME_HPP_
+
+#include <vector>
+#include <map>
+using namespace std;
+
+#include "postoFunceme.hpp"
+
+enum tipoPrecipitacao {
+	ANO_SEM_INFO, //Nao há informacoes para o referido ano
+	MES_SEM_INFO, //Não há informacoes para o referido mes
+	DIA_SEM_INFO, //Não há informacoes para o referido dia
+	DIA_INVALIDO, //Dia inválido. Exemplo 30 de fevereiro
+	MES_INVALIDO, //Mes invalido. Exemplo dia 32
+	ID_INVALIDO,  //Não há o referido posto
+	INFORMADA,
+	INDEFINIDA
+};
+
+void mapTipoPrecipitacao( map<tipoPrecipitacao, string> &tipoInformacao );
+
+class chuva_ePosto
+{
+public:
+	unsigned int Ano;
+	unsigned int Mes;
+	unsigned int Dia;
+	unsigned int Identidade;
+	string Cidade;
+	string nomePosto;
+	double Distancia;
+	tipoPrecipitacao Tipo;
+	double Valor;
+};
+
+class dados_daFunceme
+{
+public:
+	dados_daFunceme();
+	void escreverDados();
+	double estimarIndice( double x, double y, unsigned int Ano, unsigned int Mes );
+	tipoPrecipitacao getTipoPrecipitacao( unsigned int Ano, unsigned int Mes, 
+										  unsigned int Dia, postoFunceme &Posto );
+	tipoPrecipitacao getTipoPrecipitacao( unsigned int Ano, unsigned int Mes, 
+										  unsigned int Dia, unsigned int Identidade );
+	double getValorPrecipitacao( unsigned int Ano, unsigned int Mes, 
+								 unsigned int Dia, postoFunceme &Posto );
+	double getValorPrecipitacao( unsigned int Ano, unsigned int Mes, 
+								 unsigned int Dia, unsigned int Identidade );
+	double aproximarIndice( unsigned int Ano, unsigned int Mes, unsigned int Dia, 
+							double x, double y );
+	double aproximarIndice( unsigned int Ano, unsigned int Mes, 
+							unsigned int Dia, double x, double y,
+							vector<chuva_ePosto> &postos );
+	vector<postoFunceme> postosFunceme;
+
+private:
+
+	static const double Epsilon;
+
+protected:
+
+};
+
+#endif  // _DADOS_DAFUNCEME_HPP_
