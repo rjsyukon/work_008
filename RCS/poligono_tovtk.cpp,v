@@ -1,0 +1,468 @@
+head	1.6;
+access;
+symbols;
+locks
+	rjs:1.6; strict;
+comment	@// @;
+
+
+1.6
+date	2015.02.11.22.00.28;	author rjs;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2015.02.11.21.03.57;	author rjs;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2015.02.11.18.08.13;	author rjs;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2015.02.11.17.57.32;	author rjs;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2015.02.10.02.02.19;	author rjs;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2015.02.09.21.38.11;	author rjs;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@*** empty log message ***
+@
+text
+@#include "poligono_tovtk.hpp"
+
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <sstream>
+#include <iomanip>
+#include <vector>
+#include <string>
+#include <algorithm> 
+
+using namespace std;
+
+poligono_toVtk::poligono_toVtk()
+{
+}
+
+void poligono_toVtk::ceara_toVtk()
+{
+	ifstream inFile( "/home/prof/Download/coordenadasDengueFunceme/pontos_ceara.txt",
+					 ios::in);
+	ofstream outFile( "ceara.vtk", ios::out ); 
+	double Number1, Number2;
+	char c;
+	vector<double> xCoord, yCoord;
+
+	while ( inFile >> Number1 && inFile >> c && inFile >> Number2 ){
+		xCoord.push_back( Number1 );
+		yCoord.push_back( Number2 );
+	}
+	inFile.close();
+
+	outFile.precision(14);
+	outFile.setf(ios_base::fixed, ios_base::floatfield); 
+
+	outFile << "# vtk DataFile Version 3.0" << endl;
+	outFile << "Contorno do Ceara" << endl;
+	outFile << "ASCII" << endl;
+	outFile << "DATASET POLYDATA" << endl;
+	outFile << "POINTS" << " " << xCoord.size() << " double" << endl;	
+	vector<double>::iterator xIter, yIter;
+	for( xIter=xCoord.begin(), yIter=yCoord.begin(); xIter!=xCoord.end(); xIter++,
+		 yIter++ ){
+		outFile << *xIter << " " << *yIter << " " << 0 << "\n";
+	}
+	outFile << "POLYGONS" << " " << 1 << " " << xCoord.size()+1 << "\n"; 
+	outFile << xCoord.size() << " ";
+	for( unsigned int i=0; i<xCoord.size(); i++)
+		outFile << " " << i;
+
+	outFile.close();
+}
+
+void poligono_toVtk::municipios_toVtk()
+{
+	ifstream inFile( "/home/prof/Download/coordenadasDengueFunceme/pontos_municipio_comp.txt", ios::in);
+	ofstream outFile( "municipiosCeara.vtk", ios::out ); 
+	double Number1, Number2;
+	unsigned int uintNumber;
+	double fNumber;
+	char Asterisco;
+	string Cidade;
+	string Linha;
+	vector<double> xCoord, yCoord;
+	vector<string> Cidades;
+	vector<unsigned int> Tamanhos;
+
+	while( inFile >> Asterisco ){
+		char c;
+		char Virgula;
+		inFile >> Virgula;
+		inFile >> uintNumber;
+		inFile >> Virgula;
+
+		while( (c=inFile.get()) != ',' ){
+			Cidade.push_back(c);
+		}
+		inFile >> fNumber;
+		inFile >> Virgula;
+		inFile >> fNumber;
+		inFile >> Virgula;
+		inFile >> fNumber;
+		inFile >> Virgula;
+		inFile >> fNumber;
+		inFile >> Virgula;
+		inFile >> uintNumber;
+
+		unsigned int Tamanho=0;
+		while ( inFile >> Number1 && inFile >> Virgula && inFile >> Number2 ){
+			xCoord.push_back( Number1 );
+			yCoord.push_back( Number2 );
+			Tamanho++;
+		}
+
+		Cidades.push_back( Cidade );
+		Tamanhos.push_back( Tamanho );
+
+		Cidade.clear();
+		inFile.clear();
+	}
+
+	outFile.precision(14);
+	outFile.setf(ios_base::fixed, ios_base::floatfield); 
+
+	outFile << "# vtk DataFile Version 3.0" << endl;
+	outFile << "Municipios do Ceara" << endl;
+	outFile << "ASCII" << endl;
+	outFile << "DATASET POLYDATA" << endl;
+	outFile << "POINTS" << " " << xCoord.size() << " double" << endl;	
+	vector<double>::iterator xIter, yIter;
+	for( xIter=xCoord.begin(), yIter=yCoord.begin(); xIter!=xCoord.end(); xIter++,
+			 yIter++ ){
+		outFile << *xIter << " " << *yIter << " " << 0 << "\n";
+	}
+
+	outFile << "POLYGONS" << " " << Cidades.size() << " ";
+	outFile << Cidades.size()+xCoord.size() << "\n"; 
+
+	vector<string>::iterator cidIter;
+	vector<unsigned int>::iterator tamIter;
+	unsigned int Soma=0;
+	for( cidIter=Cidades.begin(), tamIter=Tamanhos.begin(); 
+		 cidIter!=Cidades.end();
+		 ++cidIter, ++tamIter ){
+		outFile << *tamIter;
+		for( unsigned int i=Soma; i<Soma+(*tamIter); ++i )
+			outFile << " " << i;
+		outFile << "\n";
+		Soma += *tamIter;
+
+	}
+
+	inFile.close();
+	outFile.close();
+
+	return;
+}
+
+void poligono_toVtk::postos_toVtk()
+{
+
+	ifstream inFile( "/home/prof/Download/coordenadasDengueFunceme/Postos/postos_comCoordenadasDiferentesForaOceano.txt", ios::in);
+	ofstream outFile; 
+
+	string primeiraLinha;
+	string restoLinha;
+	vector<postoFunceme> postosFunceme;
+	postoFunceme tempPosto;
+	char pontoVirgula;
+	char c;
+	unsigned int Identidade = 0;
+	unsigned int Soma;
+
+	outFile.precision(14);
+	outFile.setf(ios_base::fixed, ios_base::floatfield); 
+
+	inFile >> primeiraLinha;
+
+	while( inFile >> tempPosto.Identidade ){
+
+		if( tempPosto.Identidade != Identidade ){
+			inFile >> pontoVirgula;
+
+			while( (c=inFile.get()) != ';' ){
+				tempPosto.Cidade.push_back(c);
+			}
+
+			while( (c=inFile.get()) != ';' ){
+				tempPosto.nomePosto.push_back(c);
+			}
+
+			inFile >> tempPosto.yCoord;
+			inFile >> pontoVirgula;
+			inFile >> tempPosto.xCoord;		
+			inFile >> pontoVirgula;
+			while( (c=inFile.get()) != '\n' );
+
+			postosFunceme.push_back( tempPosto );
+
+			tempPosto.Cidade.clear();
+			tempPosto.nomePosto.clear();
+
+			Identidade = tempPosto.Identidade;
+		}
+		else{
+			while( (c=inFile.get()) != '\n' );
+		}
+
+		restoLinha.clear();
+	}
+
+	inFile.close();
+
+	// begin: postosFunceme.txt
+	outFile.open( "postosFunceme.txt", ios::out ); 
+	vector<postoFunceme>::iterator pIter;
+
+	Soma=0;
+	for( pIter=postosFunceme.begin(); pIter!=postosFunceme.end(); ++pIter ){
+		outFile << Soma << " ";
+		outFile << pIter->Identidade << " ";
+		outFile << pIter->xCoord << " ";
+		outFile << pIter->yCoord << " ";
+		outFile << pIter->nomePosto << "\n";
+		++Soma;
+	}
+	outFile.close();
+	// end: postosFunceme.txt
+
+	// begin: postosFunceme.vtk
+	outFile.open( "postosFunceme.vtk", ios::out ); 
+	outFile << "# vtk DataFile Version 3.0" << endl;
+	outFile << "Postos da Funceme" << endl;
+	outFile << "ASCII" << endl;
+	outFile << "DATASET UNSTRUCTURED_GRID" << endl;
+	outFile << "POINTS" << " " << postosFunceme.size() << " double" << endl;	
+	for( pIter=postosFunceme.begin(); pIter!=postosFunceme.end(); ++pIter ){
+		outFile << pIter->xCoord << " ";
+		outFile << pIter->yCoord << " ";
+		outFile << 0 << "\n";
+	}
+	outFile << "CELLS " << 1 << " " << postosFunceme.size()+1 << "\n";
+	outFile << postosFunceme.size();
+
+	Soma=0;
+	for( pIter=postosFunceme.begin(); pIter!=postosFunceme.end(); ++pIter ){
+		outFile << " " << Soma;
+		++Soma; 
+	}
+	outFile << "\n";
+	outFile << "CELL_TYPES " << 1 << "\n";
+	outFile << 2 << "\n";
+
+	outFile.close();
+	// end: postosFunceme.vtk
+
+	// begin: postosFunceme.node
+	outFile.open( "postosFunceme.node", ios::out ); 
+	outFile << postosFunceme.size() << " " << 2 << " " << 0 << " " << 0 << "\n";
+	Soma=0;
+	for( pIter=postosFunceme.begin(); pIter!=postosFunceme.end(); ++pIter ){
+		outFile << " " << Soma << " " << pIter->xCoord << " " << pIter->yCoord << "\n";
+		++Soma; 
+	}
+	outFile.close();
+	// end: postosFunceme.node
+
+	return;
+}
+
+void poligono_toVtk::triangle_toVtk()
+{
+	ifstream inFile;
+	ofstream outFile;
+	unsigned int uintNumber;
+	double Number;
+
+	parCoord tempCoord;
+	vector<parCoord> coordenadasPostos;
+
+	verticesTriangulo tempVertice;
+	vector<verticesTriangulo> vTriangulos;
+
+	// begin: ../triangle/postosFunceme.1.node
+	inFile.open( "../triangle/postosFunceme.1.node", ios::in );
+	inFile >> uintNumber >> uintNumber >> uintNumber >> uintNumber;
+
+	while( inFile >> uintNumber >> tempCoord.xCoord >> tempCoord.yCoord >> Number ){
+		coordenadasPostos.push_back( tempCoord );
+	}
+
+	inFile.close();
+	// end: ../triangle/postosFunceme.1.node
+
+	// begin: ../triangle/postosFunceme.1.ele
+	inFile.open( "../triangle/postosFunceme.1.ele", ios::in );
+	inFile >> uintNumber >> uintNumber >> uintNumber;
+
+	while( inFile >> uintNumber >> tempVertice.Vertice1 >> tempVertice.Vertice2
+		   >> tempVertice.Vertice3 ){
+		vTriangulos.push_back( tempVertice );
+	}
+	
+	inFile.close();
+	// end: ../triangle/postosFunceme.1.ele
+
+	outFile.precision(14);
+	outFile.setf(ios_base::fixed, ios_base::floatfield); 
+
+	//begin: triangulacaoPostosFunceme.vtk
+	outFile.open( "triangulacaoPostosFunceme.vtk", ios::out ); 
+	outFile << "# vtk DataFile Version 3.0" << endl;
+	outFile << "Triangulacao dos Postos da Funceme" << endl;
+	outFile << "ASCII" << endl;
+	outFile << "DATASET UNSTRUCTURED_GRID" << endl;
+	outFile << "POINTS" << " " << coordenadasPostos.size() << " double" << endl;	
+
+	vector<parCoord>::iterator parIter;
+	for( parIter=coordenadasPostos.begin(); parIter!=coordenadasPostos.end(); ++parIter )
+		outFile << " " << parIter->xCoord << " " << parIter->yCoord << " " << 0 << "\n";
+
+	outFile << "CELLS " << vTriangulos.size() << " " << vTriangulos.size()*4 << "\n";
+
+	vector<verticesTriangulo>::iterator tIter;
+	for( tIter=vTriangulos.begin(); tIter!=vTriangulos.end(); ++tIter ){
+		outFile << 3 << " " << tIter->Vertice1 << " " << tIter->Vertice2;
+		outFile << " " << tIter->Vertice3 << "\n";
+	}
+
+	outFile << "CELL_TYPES " << vTriangulos.size() << "\n";
+	for( tIter=vTriangulos.begin(); tIter!=vTriangulos.end(); ++tIter )
+		outFile << 5 << " ";
+	outFile << "\n";
+
+	outFile.close();
+	//end: triangulacaoPostosFunceme.vtk
+
+	return;
+}
+@
+
+
+1.5
+log
+@*** empty log message ***
+@
+text
+@a157 1
+	cout << primeiraLinha << "\n";
+d247 70
+@
+
+
+1.4
+log
+@*** empty log message ***
+@
+text
+@a0 2
+
+
+d56 2
+a57 3
+	ifstream inFile( "pontos_municipio_comp.txt", ios::in);
+	ofstream outFile( "/home/prof/Download/coordenadasDengueFunceme/municipiosCeara.vtk",
+					  ios::out ); 
+d142 1
+a142 3
+	ifstream inFile( 
+	"/home/prof/Download/coordenadasDengueFunceme/Postos/postos_comCoordenadas.txt",
+					 ios::in);
+d152 1
+d195 1
+d198 2
+d201 1
+d204 3
+a206 1
+		outFile << pIter->yCoord << "\n";
+d209 1
+d211 1
+d226 1
+a226 1
+	unsigned int Soma=0;
+d236 1
+d238 1
+d241 1
+a241 1
+	Soma=1;
+d247 1
+@
+
+
+1.3
+log
+@*** empty log message ***
+@
+text
+@d145 2
+a146 1
+	ifstream inFile( "/home/prof/Download/coordenadasDengueFunceme/Postos/postos.txt",
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@d12 1
+d22 2
+a23 1
+	ifstream inFile( "pontos_ceara.txt", ios::in);
+d59 2
+a60 1
+	ofstream outFile( "municipiosCeara.vtk", ios::out ); 
+d136 106
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d66 1
+a71 1
+		cout << Virgula << endl;
+a72 1
+		cout << uintNumber << endl;
+a73 2
+		cout << Virgula << endl;
+		
+d75 12
+a86 1
+		return;
+d88 1
+d92 1
+d94 5
+d101 32
+@

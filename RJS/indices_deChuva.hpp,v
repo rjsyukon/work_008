@@ -1,0 +1,50 @@
+head	1.1;
+access;
+symbols;
+locks
+	rjs:1.1; strict;
+comment	@// @;
+
+
+1.1
+date	2023.02.23.12.04.07;	author rjs;	state Exp;
+branches;
+next	;
+
+
+desc
+@.
+@
+
+
+1.1
+log
+@.
+@
+text
+@
+#ifndef _INDICES_DECHUVA_HPP_
+#define _INDICES_DECHUVA_HPP_
+
+#include <vector>
+using namespace std;
+
+class indices_deChuva
+{
+
+public:
+	indices_deChuva();
+	unsigned int Ano;
+	unsigned int Mes;
+	double Total; //Soma das precipitacoes do mes!
+	vector<double> Precipitacoes;
+
+private:
+
+protected:
+
+};
+
+#endif  // _INDICES_DECHUVA_HPP_
+
+@

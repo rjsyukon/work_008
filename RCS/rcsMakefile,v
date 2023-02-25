@@ -1,0 +1,72 @@
+head	1.2;
+access;
+symbols;
+locks
+	rjs:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2011.09.14.11.12.54;	author rjs;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.06.16.23.20.11;	author rjs;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@
+ifeq ($(WHAT_TO_DO),IN)
+COMMAND=min.sh
+endif
+
+ifeq ($(WHAT_TO_DO),OUT)
+COMMAND=mout.sh
+endif
+
+ifeq ($(WHAT_TO_DO),CI)
+COMMAND=mci.sh
+endif
+
+ifeq ($(WHAT_TO_DO),CO)
+COMMAND=mco.sh
+endif
+
+RCSFILES=$(wildcard *.c *.cpp *.cxx *.h *.hpp *.hxx Makefile rcsMakefile)
+
+.PHONY: rcs $(RCSFILES)
+rcs: $(RCSFILES)
+
+$(RCSFILES):
+	$(COMMAND) $@@
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d18 1
+a18 1
+RCSFILES=$(wildcard *.c *.cpp *.cxx *.h *.hpp *.hxx Makefile RcsMakefile)
+a24 7
+
+
+
+
+
+
+
+@

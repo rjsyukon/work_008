@@ -1,0 +1,30 @@
+head	1.1;
+access;
+symbols;
+locks
+	rjs:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2023.02.23.12.04.08;	author rjs;	state Exp;
+branches;
+next	;
+
+
+desc
+@.
+@
+
+
+1.1
+log
+@.
+@
+text
+@postoFunceme.o: postoFunceme.cpp postoFunceme.hpp indices_deChuva.hpp
+dados_daFunceme.o: dados_daFunceme.cpp dados_daFunceme.hpp \
+ postoFunceme.hpp indices_deChuva.hpp
+indices_deChuva.o: indices_deChuva.cpp indices_deChuva.hpp
+main.o: main.cpp dados_daFunceme.hpp postoFunceme.hpp indices_deChuva.hpp
+@

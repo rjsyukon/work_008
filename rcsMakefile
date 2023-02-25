@@ -1,0 +1,24 @@
+
+ifeq ($(WHAT_TO_DO),IN)
+COMMAND=min.sh
+endif
+
+ifeq ($(WHAT_TO_DO),OUT)
+COMMAND=mout.sh
+endif
+
+ifeq ($(WHAT_TO_DO),CI)
+COMMAND=mci.sh
+endif
+
+ifeq ($(WHAT_TO_DO),CO)
+COMMAND=mco.sh
+endif
+
+RCSFILES=$(wildcard *.c *.cpp *.cxx *.h *.hpp *.hxx Makefile rcsMakefile)
+
+.PHONY: rcs $(RCSFILES)
+rcs: $(RCSFILES)
+
+$(RCSFILES):
+	$(COMMAND) $@
